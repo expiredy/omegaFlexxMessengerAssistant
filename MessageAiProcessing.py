@@ -16,7 +16,7 @@ nltk.download([
 ])
 
 
-def get_messege_processing_info(written_text_by_user: str, written_text_by_user_for_connection: dict) -> dict:
+def get_messege_processing_info(written_text_by_user: str, written_text_by_user_for_connection: str) -> dict:
     # Разделяем на слова (токенизируем)
     pprint(nltk.word_tokenize(written_text_by_user), width=79, compact=True)
     written_text_by_user = nltk.word_tokenize(written_text_by_user)
