@@ -6,6 +6,10 @@ BINARY_PARAMS_CONVERTOR_PARAMS = {POSITIVE_COEFFICIENT_KEY: (),
                                   CONNECTION_COEFFICIENT_KEY: ()
                                   }
 
+USERS_MODES_PARAMS_MULTIPLIERS = {CUTIE_MODE_ID: [(0, 0.25), (0.25, 1)],
+                                  AVERAGE_MODE_ID: [(0, 0.5), (0.5, 1)],
+                                  MORGENSHTERN_MODE_ID: [(0, 0.75), (0.75, 1)]}
+
 
 class ServerCallbackAnswer():
     callback_data = {}
