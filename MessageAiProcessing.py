@@ -1,5 +1,6 @@
 import nltk
 from pprint import pprint
+from DictKeyConfig import *
 from nltk.sentiment import SentimentIntensityAnalyzer
 from nltk.corpus import stopwords
 
@@ -15,7 +16,7 @@ nltk.download([
 ])
 
 
-def get_messege_processing_info(written_text_by_user: str, written_text_by_user_for_connection: dict) -> tuple:
+def get_messege_processing_info(written_text_by_user: str, written_text_by_user_for_connection: dict) -> dict:
     # Разделяем на слова (токенизируем)
     pprint(nltk.word_tokenize(written_text_by_user), width=79, compact=True)
     written_text_by_user = nltk.word_tokenize(written_text_by_user)
@@ -39,4 +40,5 @@ def get_messege_processing_info(written_text_by_user: str, written_text_by_user_
 
     connection_res = results_for_connection['compound']
 
-    return negative_res, positive_res, neutral_res, connection_res
+    return {NEGATIVE_COEFFICIENT_KEY: negative_res, POSITIVE_COEFFICIENT_KEY: positive_res,
+            NEUTRAL_COEFFICIENT_KEY: neutral_res, CONNECTION_COEFFICIENT_KEY: connection_res}
