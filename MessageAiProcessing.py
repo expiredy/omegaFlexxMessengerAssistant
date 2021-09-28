@@ -34,11 +34,9 @@ def get_messege_processing_info(written_text_by_user: str, written_text_by_user_
     results_for_karma = sia.polarity_scores(filtered_written_text_by_user)
     negative_res = results_for_karma['neg']
 
-    positive_res = results_for_karma['pos']
-
     neutral_res = results_for_karma['neu']
 
     connection_res = results_for_connection['compound']
 
-    return {NEGATIVE_COEFFICIENT_KEY: negative_res, POSITIVE_COEFFICIENT_KEY: positive_res,
+    return {NEGATIVE_COEFFICIENT_KEY: negative_res,
             NEUTRAL_COEFFICIENT_KEY: neutral_res, CONNECTION_COEFFICIENT_KEY: connection_res}
