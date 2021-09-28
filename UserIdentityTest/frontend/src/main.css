@@ -1,0 +1,9 @@
+.grid {
+  display: flex;                       
+  flex-wrap: wrap;  
+  justify-content: space-around;
+  width: 100%;
+}
+body{
+  background: radial-gradient(rgb(35,35,35), rgb(0,0,0))
+}
