@@ -1,4 +1,4 @@
-import MessageAiProcessing
+from AiProcessors import MessageAiProcessing
 from DictKeyConfig import *
 
 

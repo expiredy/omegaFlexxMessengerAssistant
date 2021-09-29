@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="info-part">
+        <div class="info-div-block">
             <h1>Welcome to my domain</h1>
             <h2>Here we got a little test to get which mode of our assistent
                 will fit you the most
