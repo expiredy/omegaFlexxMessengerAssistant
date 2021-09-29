@@ -4,6 +4,8 @@ from DictKeyConfig import *
 from nltk.sentiment import SentimentIntensityAnalyzer
 from nltk.corpus import stopwords
 
+import NewMultiLangProcessor
+
 nltk.download([
     "names",
     "stopwords",
