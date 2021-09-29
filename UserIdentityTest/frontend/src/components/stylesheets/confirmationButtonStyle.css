@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:600&display=swap');
+
+body{
+  height: 100vh;
+}
+
+.confirming-button-span{
+  position: relative;
+  display: inline-flex;
+  width: 180px;
+  height: 55px;
+  margin: 0 15px;
+  perspective: 1000px;
+}
+.confirming-button-span a{
+  font-size: 19px;
+  letter-spacing: 1px;
+  transform-style: preserve-3d;
+  transform: translateZ(-25px);
+  transition: transform .25s;
+  font-family: 'Montserrat', sans-serif;
+  
+}
+.confirming-button-span a:before,
+.confirming-button-span a:after{
+  position: absolute;
+  content: "CONFIRM";
+  height: 55px;
+  width: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 5px solid black;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+.confirming-button-span a:before{
+  color: #fff;
+  background: #000;
+  transform: rotateY(0deg) translateZ(25px);
+}
+.confirming-button-span a:after{
+  transform: rotateX(90deg) translateZ(25px);
+}
+.confirming-button-span a:hover{
+  transform: translateZ(-25px) rotateX(-90deg);
+}
