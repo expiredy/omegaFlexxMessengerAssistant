@@ -1,4 +1,5 @@
-import Vue from "vue"
-export default function useCookie() {
-    return Vue.$cookies
+import VueCookies from 'vue-cookies'
+
+export function useCookie() {
+    return VueCookies
 }

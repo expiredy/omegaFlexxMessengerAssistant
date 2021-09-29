@@ -1,7 +1,7 @@
 import firebase from 'firebase'
 import {useApi} from '@/compositions/useApi'
-import {UserModule} from '@/store/user'
-import { ref, onUnmounted, computed } from 'vue'
+import { ref, onUnmounted, computed, watch } from 'vue'
+import { UserModule } from '@/store/user'
 
 
 firebase.initializeApp({
@@ -16,38 +16,22 @@ firebase.initializeApp({
 
 const auth = firebase.auth()
 
+
 const sendAuthData = async function(_user) {
-    if (_user){
-        UserModule.setUser(_user)
-
-        const { Aa } = UserModule.user
-
-        if (store.state.authToken) {
-            const { exec, result, error } = useApi({
-                method: 'POST',
-                url: '/auth/login',
-                data: {
-                    token: Aa
-                },
-                headers: {
-                    'content-type': 'application/json'
-                }
-            }, {}, (data) => {
-                UserModule.login()
-            })
-            await exec()
-        }
+    if (!UserModule.token && _user) {
+        const {Aa} = _user
+        const { exec, result, error } = useApi({
+            method: 'POST',
+            url: '/auth/login',
+            data: {
+                token: Aa
+            },
+        }, {}, (data) => {
+            UserModule.setTokenCookie(data.data)
+            UserModule.init()
+        })
+        await exec()
     }
-}
-
-
-const getUserData = async function(){
-    const {exec, result, error} = useApi({
-        method: 'GET',
-        url: '/auth/login',
-        // data: _user
-    })
-    await exec()
 }
 
 
@@ -62,7 +46,5 @@ export function useAuth() {
         await auth.signOut()
     }
 
-    const signOut = () => auth.signOut()
-
-    return { signIn, signOut }
+    return { signIn }
 }
