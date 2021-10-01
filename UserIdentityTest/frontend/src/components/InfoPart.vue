@@ -6,13 +6,18 @@
                 will fit you the most
             </h2>
         </div>
+        <div class="task-block">
+            <h2>Here is we will ask you a few questions and you need to answer
+                 "How relatable is for you? in range from -1 (not relatable) to 1 (relatable)
+                 and 0 is something like: "I don't know..."</h2>
+        </div>
     </div>
 </template>
 
 <script>
-export default {
-  name: 'Information'
-}
+    export default {
+    name: 'Information'
+    }
 </script>
 
 <style>
