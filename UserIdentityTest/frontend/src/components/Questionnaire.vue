@@ -1,13 +1,12 @@
 <template>
 	<div class="questionnaire">
-    	<div v-for="questionItem in questionsArray" :key="questionItem">
+    	<div v-for="questionItem in questionsArray" v-bind:key="questionItem.id">
 			<h2>{{questionItem.question}}</h2>
 			<div style="height: 50px;">
-				<div v-for="answerIndex in questionItem .AnswerWeightsArray" :key="answerIndex"
-				 class="rb-tab" :data-value="answerIndex.lenght">
+				<div v-for="answerIndex in questionItem .AnswerWeightsArray" :key="answerIndex" class="rb-tab" :data-value="answerIndex.lenght">
 					<input type="radio" @click="answerVariableHolder (questionItem.buttonName, answerIndex)"
 					 :name="questionItem.buttonName">
-					<label>{{answerIndex}}</label> 
+					<label>{{ answerIndex }}</label> 
 					<!-- <input @click="answerVariableHolder (questionItem.buttonName, answerIndex)"
 					 :name="questionItem.buttonName" type="radio" class="open">
 						<label class="overlay">
@@ -34,16 +33,18 @@ export default {
 	marksForAnswer: Array,
 	},
 	data: function(){return{
+		defaultQuestionsAnswersArray: [-1, 0, 1],
+
 		questionsArray: [
 			{question: 'Are you dumb?',
 			 buttonName: "answer1",
-			 AnswerWeightsArray: [1, 2, 3]},
+			 AnswerWeightsArray: defaultQuestionsAnswersArray},
 			{question: 'Wanna see my backugan cards collection?',
 			 buttonName: "answer2",
-			 AnswerWeightsArray: [1, 2, 3]},
+			 AnswerWeightsArray: defaultQuestionsAnswersArray},
 			{question: 'Frontend?',
 			 buttonName: "answer3",
-			 AnswerWeightsArray: [1, 2, 3]}
+			 AnswerWeightsArray: defaultQuestionsAnswersArray}
 		],
 		CallbackAnswerWeights: {}
 		}},

@@ -3,7 +3,7 @@ from AiProcessors import MessageAiProcessing
 
 BINARY_PARAMS_CONVERTOR_PARAMS = {POSITIVE_COEFFICIENT_KEY: (),
                                   NEGATIVE_COEFFICIENT_KEY: (),
-                                  NEUTRAL_COEFFICIENT_KEY: (),
+                                      NEUTRAL_COEFFICIENT_KEY: (),
                                   CONNECTION_COEFFICIENT_KEY: ()
                                   }
 

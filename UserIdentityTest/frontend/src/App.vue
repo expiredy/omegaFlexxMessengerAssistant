@@ -6,16 +6,16 @@
 </template>
 
 <script>
-import Questionnaire from './components/Questionnaire.vue'
-import Information from './components/InfoPart.vue'
+  import Questionnaire from './components/Questionnaire.vue'
+  import Information from './components/InfoPart.vue'
 
-export default {
-  name: 'App',
-  components: {
-    Questionnaire,
-    Information
+  export default {
+    name: 'App',
+    components: {
+      Questionnaire,
+      Information
+    }
   }
-}
 </script>
 
 <style>
