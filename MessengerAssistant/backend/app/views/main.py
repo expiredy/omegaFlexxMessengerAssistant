@@ -1,22 +1,33 @@
-from flask import request, Blueprint
+from flask import request, Blueprint, jsonify
 from flask import jsonify as jsonify_flask
+from websocket import WebSocket
 from ..decorators import login_required
-from .. import mongo
+from .. import mongo, ws_server, ws_secret
 from ..auth import encode_token
 from ..google import is_valid_google_token
 
 import datetime
+import json
 
 main = Blueprint("api", __name__)
 
 TOKEN_LIVE_TIME_MINUTES = 60 * 24
 
 
-def jsonify(data):
-    return jsonify_flask(data)
+def send_websocket(*users_id):
+    ws = WebSocket()
+    ws.connect(ws_server)
+
+    for user_id in users_id:
+        ws.send(json.dumps({
+            "googleId": user_id,
+            "secret_key": ws_secret
+        }))
+
+    ws.close()
 
 
-@main.route("/api/v1/send_message", methods=["POST"])
+@main.route("/v1/send_message", methods=["POST"])
 @login_required
 def send_message(current_user):
     collection = mongo["chat_levkovo"]
@@ -46,7 +57,7 @@ def send_message(current_user):
         "date": datetime.datetime.now()
     }
 
-    current_chat = list(collection.chats.find({"members": {"$in": members}}))
+    current_chat = list(collection.chats.find({"members": {"$all": members}}))
 
     # Обработка сообщения -
     # Обработка сообщения -
@@ -65,16 +76,20 @@ def send_message(current_user):
 
         collection.chats.update({"_id": current_chat["_id"]}, {"$set": {"messages": current_chat["messages"]}})
 
+    # send websocket
+
+    send_websocket(current_user["googleId"], second_user["googleId"])
+
     return jsonify("success")
 
 
-@main.route("/api/v1/user")
+@main.route("/v1/user")
 @login_required
 def get_user(current_user):
     return jsonify(current_user)
 
 
-@main.route("/api/v1/chats")
+@main.route("/v1/chats")
 @login_required
 def get_chats(current_user):
     def get_members(members_local):
@@ -87,7 +102,7 @@ def get_chats(current_user):
     return jsonify(data)
 
 
-@main.route("/api/v1/users")
+@main.route("/v1/users")
 @login_required
 def get_users(current_user):
     def get_members(members_local):
@@ -98,24 +113,28 @@ def get_users(current_user):
     already_chats = [get_members(i["members"]) for i in
                      collection.chats.find({"members": {"$elemMatch": {"googleId": current_user["googleId"]}}},
                                            {"_id": 0})]
-    print(already_chats)
-    new_chats = [new_chat for new_chat in collection.users.find({}, {"_id": 0})
-                 if new_chat["googleId"] not in already_chats and new_chat["googleId"] != current_user["googleId"]]
+    new_chats = [new_user for new_user in collection.users.find({}, {"_id": 0})
+                 if new_user["googleId"] not in already_chats and new_user["googleId"] != current_user["googleId"]]
 
     return jsonify(new_chats)
 
 
-@main.route("/api/v1/messages", methods=["POST"])
+@main.route("/v1/messages", methods=["POST"])
 @login_required
 def get_messages(current_user):
     # при запросе сообщений поставить флаг прочитано
     googleId = request.json["googleId"]
-    chat = list(mongo["chat_levkovo"].chats.find({"members_id": {"$in": [current_user["googleId"], googleId]}}))[0]
+    print(googleId, current_user["googleId"])
+    chat = list(mongo["chat_levkovo"].chats.find({"members_id": {"$all": [current_user["googleId"], googleId]}}))
+    if chat:
+        print(chat[0]["messages"])
+        return jsonify(chat[0]["messages"])
 
-    return jsonify(chat["messages"])
+    print("gggggg, messages")
+    return jsonify([])
 
 
-@main.route("/api/v1/auth/login", methods=["POST"])
+@main.route("/v1/auth/login", methods=["POST"])
 def auth_login():
     token = request.json["token"]
 

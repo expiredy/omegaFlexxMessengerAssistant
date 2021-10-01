@@ -1,5 +1,7 @@
+import time
+
 import pymorphy2
-from multiprocessing.pool import Pool
+from multiprocessing.pool import ThreadPool
 
 import nltk
 import spacy
@@ -11,7 +13,6 @@ from sentimental import Sentimental
 from DictKeyConfig import *
 
 ENGLISH_ALPHABET = "qwertyuiopasdfghjklzxcvbnm"
-print(len(ENGLISH_ALPHABET))
 
 nltk.download([
     "names",
@@ -48,8 +49,9 @@ def get_message_preprocessed_data_list(written_text_by_user: str) -> dict:
     # Тут вся предобработка для английского
     if language == 'en':
         # Удаление stopwords на английском
-        filtered_written_text_by_user = [word for word in written_text_by_user if
-                                         word not in stopwords.words('english')]
+        filtered_written_text_by_user = [word for word in written_text_by_user
+                                         if word not in stopwords.words('english')]
+        filtered_written_text_by_user = written_text_by_user
 
         # Соединяем в текст целиком для леммы на английском
         filtered_written_text_by_user = " ".join(filtered_written_text_by_user)
@@ -164,7 +166,7 @@ def full_message_analyze(message: str):
     return negative, toxic, bad_words, rasizm, threat
 
 
-def async_manager_preprocessor():
+def async_manager_preprocessor(pool_thread_parameter):
     global all_session_message_data, new_server_callback_data
 
     while all_session_message_data:
@@ -175,8 +177,14 @@ def async_manager_preprocessor():
 def get_diagram_data(all_message_data: list,):
     global all_session_message_data, new_server_callback_data
 
-    new_server_callback_data = []
     all_session_message_data = all_message_data
-    with Pool(processes=len(all_message_data)) as getter_pool:
-        getter_pool.map(async_manager_preprocessor, range(len(all_message_data)))
+    # with Pool(processes=len(all_message_data)) as getter_pool:
+    #     getter_pool.map(async_manager_preprocessor, range(len(all_message_data)))
+    ThreadPool(processes=len(all_message_data)).map(async_manager_preprocessor, range(len(all_message_data)))
     return new_server_callback_data
+
+
+if __name__ == "__main__":
+    work_time = time.time()
+    print(get_diagram_data(["Hello world", "You are sucker", "hate russian niggers"]))
+    print(work_time)
