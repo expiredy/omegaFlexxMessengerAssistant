@@ -1,7 +1,7 @@
 import time
 
 import pymorphy2
-import multiprocessing
+import  asyncio
 
 import nltk
 import spacy
